@@ -1,16 +1,7 @@
 # SimpleKotlinCalculator
 
 Uma aplicação simples de **calculadora em Kotlin** para Android 📱 que permite realizar operações 
-básicas de soma, subtração, multiplicação e divisão.  
-Esse projeto é ideal para quem está começando com Kotlin e desenvolvimento Android.
-
----
-
-## 🧠 Sobre
-
-Este projeto implementa as principais operações matemáticas de uma calculadora comum, 
-usando **Kotlin** no Android Studio. Ele serve como base para quem quer aprender lógica de 
-programação aplicada e estrutura de um app Android.
+básicas de soma, subtração, multiplicação e divisão.
 
 ---
 

@@ -11,10 +11,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import br.com.renan.simple_kotlin_calculator.databinding.ActivityMainBinding
 import org.mariuszgromada.math.mxparser.Expression
+import kotlin.math.exp
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val expressionBuilder = StringBuilder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,97 +33,114 @@ class MainActivity : AppCompatActivity() {
 
         val calculation = binding.calculation
 
+        // Números:
         binding.one.setOnClickListener {
-            calculation.text = "${calculation.text}1"
+            appendText("1")
         }
-
         binding.two.setOnClickListener {
-            calculation.text = "${calculation.text}2"
+            appendText("2")
         }
-
         binding.three.setOnClickListener {
-            calculation.text = "${calculation.text}3"
+            appendText("3")
         }
-
         binding.four.setOnClickListener {
-            calculation.text = "${calculation.text}4"
+            appendText("4")
         }
-
         binding.five.setOnClickListener {
-            calculation.text = "${calculation.text}5"
+            appendText("5")
         }
-
         binding.six.setOnClickListener {
-            calculation.text = "${calculation.text}6"
+            appendText("6")
         }
-
         binding.seven.setOnClickListener {
-            calculation.text = "${calculation.text}7"
+            appendText("7")
         }
-
         binding.eight.setOnClickListener {
-            calculation.text = "${calculation.text}8"
+            appendText("8")
         }
-
         binding.nine.setOnClickListener {
-            calculation.text = "${calculation.text}9"
+            appendText("9")
         }
-
         binding.zero.setOnClickListener {
-            calculation.text = "${calculation.text}0"
+            appendText("0")
         }
 
-        binding.openParentheses.setOnClickListener {
-            calculation.text = "${calculation.text}("
-        }
 
-        binding.closeParentheses.setOnClickListener {
-            calculation.text = "${calculation.text})"
-        }
+        //Parênteses
+        binding.openParentheses.setOnClickListener { appendText("(") }
+        binding.closeParentheses.setOnClickListener { appendText(")") }
 
-        binding.divide.setOnClickListener {
-            calculation.text = "${calculation.text}÷"
-        }
 
-        binding.multiplications.setOnClickListener {
-            calculation.text = "${calculation.text}×"
-        }
-
-        binding.subtraction.setOnClickListener {
-            calculation.text = "${calculation.text}–"
-        }
-
+        //Operadores
         binding.sum.setOnClickListener {
-            calculation.text = "${calculation.text}+"
+            appendText("+")
         }
-
+        binding.subtraction.setOnClickListener {
+            appendText("-")
+        }
+        binding.multiplications.setOnClickListener {
+            appendText("×")
+        }
+        binding.divide.setOnClickListener {
+            appendText("÷")
+        }
         binding.dot.setOnClickListener {
-            calculation.text = "${calculation.text}."
+            appendText(".")
         }
 
+        //Apagar
         binding.backspace.setOnClickListener {
-            calculation.text = calculation.text.dropLast(1)
+            if (expressionBuilder.isNotEmpty()) {
+                expressionBuilder.deleteCharAt(expressionBuilder.length - 1)
+                binding.calculation.text = expressionBuilder.toString()
+            }
         }
 
+        //Apagar tudo
         binding.ce.setOnClickListener {
-            calculation.text = ""
+            expressionBuilder.clear()
+            binding.calculation.text = ""
             binding.result.text = ""
         }
 
+        //Resultado
         binding.equals.setOnClickListener {
-            val expression = calculation.text.toString()
+            val expression = expressionBuilder.toString()
                 .replace("×", "*")
                 .replace("÷", "/")
-                .replace("–", "-")
 
-            val calculatedResult = Expression(expression).calculate()
+            val result = Expression(expression).calculate()
 
-            if (calculatedResult.isNaN()) {
+            if (result.isNaN()) {
                 binding.result.text = "Expressão Inválida"
             } else {
-                binding.result.text = calculatedResult.toString()
+                binding.result.text = result.toString()
             }
         }
+
+
+    }
+
+    private fun appendText(value: String){
+        val operators = listOf("+", "-", "×", "÷", ".")
+
+        // Permitir número negativo no começo da expressão
+        if(expressionBuilder.isEmpty() && value == "-") {
+            expressionBuilder.append(value)
+            binding.calculation.text = expressionBuilder.toString()
+            return
+        }
+
+        // Evitar operadores duplicados
+        if(expressionBuilder.isNotEmpty()) {
+            val lastChar = expressionBuilder.last().toString()
+            if(operators.contains(lastChar) && operators.contains(value)) {
+                return
+            }
+        }
+
+        expressionBuilder.append(value)
+        binding.calculation.text = expressionBuilder.toString()
 
     }
 }
