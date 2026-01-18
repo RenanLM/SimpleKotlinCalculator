@@ -109,14 +109,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.equals.setOnClickListener {
-            val calculatedResult = Expression(calculation.text.toString()).calculate()
+            val expression = calculation.text.toString()
+                .replace("×", "*")
+                .replace("÷", "/")
+                .replace("–", "-")
 
-            if(calculatedResult.isNaN()){
+            val calculatedResult = Expression(expression).calculate()
+
+            if (calculatedResult.isNaN()) {
                 binding.result.text = "Expressão Inválida"
             } else {
                 binding.result.text = calculatedResult.toString()
             }
-
         }
+
     }
 }
