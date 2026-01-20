@@ -5,6 +5,11 @@ básicas de soma, subtração, multiplicação e divisão.
 
 ---
 
+## 📱 Demonstração
+
+![Calculadora em funcionamento](gifs/demo_basic.gif)
+
+
 ## 🚀 Funcionalidades
 
 - 📌 Adição
