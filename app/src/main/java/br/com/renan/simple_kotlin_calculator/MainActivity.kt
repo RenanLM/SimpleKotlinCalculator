@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val expressionBuilder = StringBuilder()
 
+    private var MAX_EXPRESSION_LENGTH = 20
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -113,14 +115,29 @@ class MainActivity : AppCompatActivity() {
             if (result.isNaN()) {
                 binding.result.text = "Expressão Inválida"
             } else {
-                binding.result.text = result.toString()
+                binding.result.text = formatResult(result)
             }
         }
 
 
     }
 
+    private fun formatResult(value: Double): String {
+        return if (value % 1 == 0.0) {
+            // Número inteiro
+            value.toLong().toString()
+        } else {
+            // Número decimal com limite de casas
+            String.format("%.12f", value).trimEnd('0').trimEnd('.')
+        }
+    }
+
     private fun appendText(value: String){
+
+        if (expressionBuilder.length >= MAX_EXPRESSION_LENGTH) {
+            return
+        }
+
         val operators = listOf("+", "-", "×", "÷", ".")
 
         // Permitir número negativo no começo da expressão
